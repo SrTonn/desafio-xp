@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import express from 'express';
 import 'express-async-errors';
 import 'dotenv/config';
