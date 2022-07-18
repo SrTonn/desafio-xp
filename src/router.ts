@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import loginController from './controllers/login.controller';
+import accountController from './controllers/account.controller';
 
 const routers = Router();
 
-routers.use('/login', loginController);
+routers.use('/account', accountController);
 
 export default routers;
