@@ -5,9 +5,12 @@
   "main": "server.ts",
   "scripts": {
     "build": "tsc",
-    "start": "node ./dist",
+    "start": "node ./dist/server.js",
     "dev": "nodemon --watch \"./src/**\" --ext \"ts,js\" --ignore \"src/**/*.spec.ts,src/**/*.json\" --exec \"ts-node src/server.ts\"",
-    "prestart": "tsc && npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all"
+    "db:prestart": "tsc && sequelize db:create && sequelize db:migrate && sequelize db:seed:all",
+    "db:drop": "sequelize db:drop",
+    "db:seed": "sequelize db:seed:all",
+    "db:reset": "tsc && sequelize db:drop && sequelize db:create && sequelize db:migrate && sequelize db:seed:all"
   },
   "keywords": [],
   "author": "Wellington Rodrigues",
