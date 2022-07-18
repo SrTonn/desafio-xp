@@ -3,11 +3,11 @@ import HttpException from '../shared/http.exception';
 
 const SECRET = process.env.JWT_SECRET!;
 const jwtConfig: SignOptions = {
-  expiresIn: '60m',
+  expiresIn: '1 days',
   algorithm: 'HS256',
 };
 
-const generateJWTToken = (payload: string) => sign(payload, SECRET, jwtConfig);
+const generateJWTToken = (payload: object) => sign(payload, SECRET, jwtConfig);
 
 const authenticateToken = async (token: string) => {
   try {
