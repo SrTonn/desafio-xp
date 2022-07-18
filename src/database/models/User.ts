@@ -37,6 +37,10 @@ User.init({
     unique: true,
     allowNull: false,
   },
+  password: {
+    type: STRING(100),
+    allowNull: false,
+  },
 }, {
   sequelize: db,
   timestamps: true,

@@ -16,7 +16,7 @@ Wallet.init({
   },
   balance: {
     type: DECIMAL(10, 2),
-    allowNull: false,
+    defaultValue: 0,
   },
 }, {
   sequelize: db,
