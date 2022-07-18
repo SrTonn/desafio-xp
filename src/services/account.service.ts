@@ -4,7 +4,7 @@ import { User } from '../database/models/User';
 import { IUser } from '../interfaces';
 import { Wallet } from '../database/models/Wallet';
 
-const authentication = async ({ email, password }: IUser) => {
+const authentication = async ({ email, password }: Omit<IUser, 'firstName' | 'lastName'>) => {
   const user = await User.findOne({
     raw: true,
     attributes: { exclude: ['password', 'createdAt', 'updatedAt'] },
