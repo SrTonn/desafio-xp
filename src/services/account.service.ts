@@ -19,10 +19,10 @@ const authentication = async ({ email, password }: Omit<IUser, 'firstName' | 'la
   return { token };
 };
 
-const createUser = async ({ firstName, lastName, email, password }: IUser) => {
+const createUser = async ({ nickName, firstName, lastName, email, password }: IUser) => {
   let newUser;
   try {
-    newUser = await User.create({ firstName, lastName, email, password });
+    newUser = await User.create({ nickName, firstName, lastName, email, password });
   } catch {
     throw new HttpException(409, 'User already registered');
   }

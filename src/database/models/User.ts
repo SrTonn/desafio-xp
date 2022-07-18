@@ -4,6 +4,8 @@ import db from '.';
 class User extends Model {
   id!: number;
 
+  nickName?: string;
+
   firstName!: string;
 
   lastName!: string;
@@ -23,6 +25,9 @@ User.init({
     allowNull: false,
     primaryKey: true,
     autoIncrement: true,
+  },
+  nickName: {
+    type: STRING(30),
   },
   firstName: {
     type: STRING(30),
