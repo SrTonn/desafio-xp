@@ -1,4 +1,5 @@
 import { Wallet } from '../database/models/Wallet';
+import { WalletHistory } from '../database/models/WalletHistory';
 import HttpException from '../shared/http.exception';
 
 const getBalance = async (userId: number) => {
@@ -29,8 +30,19 @@ const withdraw = async (userId: number, { value: withdrawValue }: { value: numbe
   }
 };
 
+const history = async (userId: number) => {
+  const response = await WalletHistory.findAll({
+    raw: true,
+    attributes: { exclude: ['userId'] },
+    where: { userId },
+  });
+
+  return response;
+};
+
 export {
   getBalance,
   deposit,
   withdraw,
+  history,
 };

@@ -1,7 +1,7 @@
 import { Request, Response, Router } from 'express';
 import { authValidation, walletValidation } from '../middlewares';
 
-import { getBalance, deposit, withdraw } from '../services/wallet.service';
+import { getBalance, deposit, withdraw, history } from '../services/wallet.service';
 
 const walletRouter = Router();
 
@@ -23,6 +23,13 @@ walletRouter
     const { id } = res.locals.payload;
     const response = await withdraw(id, req.body);
     return res.status(201).json(response);
+  });
+
+walletRouter
+  .get('/history', authValidation, async (req: Request, res: Response) => {
+    const { id } = res.locals.payload;
+    const response = await history(id);
+    return res.status(200).json(response);
   });
 
 export default walletRouter;
