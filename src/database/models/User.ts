@@ -51,6 +51,11 @@ User.init({
   timestamps: true,
   underscored: true,
   tableName: 'Users',
+  defaultScope: {
+    attributes: {
+      exclude: ['password'],
+    },
+  },
 });
 
 export { User };
