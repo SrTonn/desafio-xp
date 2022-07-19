@@ -33,7 +33,34 @@ const createUser = async ({ nickName, firstName, lastName, email, password }: IU
   return { token };
 };
 
+const getUser = async (userId: number, excludeAttr: string[] = []) => {
+  const user = await User.findByPk(
+    userId,
+    { raw: true, attributes: { exclude: excludeAttr } },
+  );
+  if (!user) throw new HttpException(404, 'User does not exist');
+  return user;
+};
+
+const updateUser = async (
+  userId: number,
+  { nickName, email, password }: Omit<IUser, 'firstName' | 'lastName'>,
+) => {
+  const user = await getUser(userId, ['id', 'createdAt', 'updatedAt']);
+  await User.update(
+    { nickName, email, password },
+    { where: { id: userId } },
+  );
+
+  if (nickName) user.nickName = nickName;
+  if (email) user.email = email;
+  if (password) user.password = password;
+
+  return user;
+};
+
 export {
   authentication,
   createUser,
+  updateUser,
 };
