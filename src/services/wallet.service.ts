@@ -22,12 +22,11 @@ const deposit = async (userId: number, { value: depositValue }: { value: number 
 };
 
 const withdraw = async (userId: number, { value: withdrawValue }: { value: number }) => {
-  try {
-    await Wallet.decrement({ balance: withdrawValue }, { where: { userId } });
-    return { success: true };
-  } catch (error) {
-    throw new HttpException(500, 'Internal Server Error');
-  }
+  const wallet = await Wallet.findByPk(userId);
+  if (wallet!.balance < withdrawValue) throw new HttpException(406, 'Insufficient Balance');
+
+  await Wallet.decrement({ balance: withdrawValue }, { where: { userId } });
+  return { success: true };
 };
 
 const history = async (userId: number) => {
