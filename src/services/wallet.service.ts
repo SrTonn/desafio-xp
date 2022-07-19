@@ -20,7 +20,17 @@ const deposit = async (userId: number, { value: depositValue }: { value: number 
   }
 };
 
+const withdraw = async (userId: number, { value: withdrawValue }: { value: number }) => {
+  try {
+    await Wallet.decrement({ balance: withdrawValue }, { where: { userId } });
+    return { success: true };
+  } catch (error) {
+    throw new HttpException(500, 'Internal Server Error');
+  }
+};
+
 export {
   getBalance,
   deposit,
+  withdraw,
 };
