@@ -6,7 +6,7 @@ import {
   updateUserValidation,
 } from '../middlewares';
 
-import { authentication, createUser, updateUser } from '../services/account.service';
+import { authentication, createUser, updateUser, removeUser } from '../services/account.service';
 
 const accountRouter = Router();
 
@@ -26,5 +26,11 @@ accountRouter
     const response = await updateUser(id, req.body);
     return res.status(200).json(response);
   });
+
+accountRouter.delete('/remove/me', authValidation, async (req: Request, res: Response) => {
+  const { id } = res.locals.payload;
+  await removeUser(id);
+  return res.sendStatus(204);
+});
 
 export default accountRouter;

@@ -59,8 +59,15 @@ const updateUser = async (
   return user;
 };
 
+const removeUser = async (userId: number) => {
+  await getUser(userId);
+  await User.destroy({ where: { id: userId } });
+  await Wallet.destroy({ where: { userId } });
+};
+
 export {
   authentication,
   createUser,
   updateUser,
+  removeUser,
 };
