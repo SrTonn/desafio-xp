@@ -1,12 +1,7 @@
-interface IInvestmentCalculator {
-  stockBought: number;
-  investedAmount: number;
-  change: number;
-  error?: string;
-}
+import { IInvestment } from '../interfaces';
 
 const investmentCalculator = <T = number>(stockPrice: T, investmentValue: T) => {
-  const result = {} as IInvestmentCalculator;
+  const result = {} as IInvestment;
   const investmentInteger = Math.floor(Number(investmentValue));
   const left = (investmentInteger % Number(stockPrice));
 
