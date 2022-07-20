@@ -7,6 +7,9 @@ import { investmentCalculator } from '../utils/calculator';
 
 import sequelize from '../database/models';
 import { UserStock } from '../database/models/UserStock';
+import { walletManagement } from '../utils/managementWallet';
+import { userStockManagement } from '../utils/managementStock';
+import { transactionRegistry } from '../utils/managementTransaction';
 
 const buyAssets = async (
   userId: number,
@@ -26,41 +29,13 @@ const buyAssets = async (
   }
 
   if (investment.error) throw new HttpException(406, investment.error);
-
-  return sequelize.transaction(async (t) => {
-    await Wallet.decrement(
-      { balance: investment.investedAmount },
-      { where: { userId }, transaction: t },
-    );
-
-    await Stocks.decrement(
-      { volume: investment.stockBought },
-      { where: { stock }, transaction: t },
-    );
-
-    const [response]: any = await UserStock.increment(
-      { availableQuantity: investment.stockBought },
-      { where: { userId, stockCode: stock }, transaction: t },
-    );
-
-    if (!response[1]) {
-      await UserStock.create({
-        userId,
-        stockCode: stock,
-        availableQuantity: investment.stockBought,
-      }, { transaction: t });
-    }
-
-    const transaction = await Transaction.create({ userId, stockCode: stock }, { transaction: t });
-    await Report.create({
-      transactionId: transaction.id,
-      quantity: investment.stockBought,
-      type: 1,
-      value: investment.investedAmount,
-    }, { transaction: t });
-
-    return investment;
+  await sequelize.transaction(async (t) => {
+    await walletManagement(userId, -investment.investedAmount, 3, t);
+    await userStockManagement(userId, investment.stockBought, stock, t);
+    await transactionRegistry(userId, investment, stock, t);
   });
+
+  return investment;
 };
 
 const sellAssets = async (
