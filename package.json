@@ -10,7 +10,8 @@
     "db:prestart": "tsc && sequelize db:create && sequelize db:migrate && sequelize db:seed:all",
     "db:drop": "sequelize db:drop",
     "db:seed": "sequelize db:seed:all",
-    "db:reset": "tsc && sequelize db:drop && sequelize db:create && sequelize db:migrate && sequelize db:seed:all"
+    "db:reset": "tsc && sequelize db:drop && sequelize db:create && sequelize db:migrate && sequelize db:seed:all",
+    "lint": "eslint . --ext .ts"
   },
   "keywords": [],
   "author": "Wellington Rodrigues",
