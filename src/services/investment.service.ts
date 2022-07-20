@@ -63,10 +63,39 @@ const buyAssets = async (
   });
 };
 
-    return investment;
+const sellAssets = async (
+  userId: number,
+  { stock, value: investmentValue }: { stock: string, value: number },
+) => {
+  const userStock = await UserStock.findOne({ where: { userId, stockCode: stock }, raw: true });
+  if (!userStock) throw new HttpException(404, 'Asset Not Found');
+
+  const quantity = userStock.availableQuantity;
+  if (quantity! < investmentValue) throw new HttpException(406, 'Insufficient Assets');
+
+  return sequelize.transaction(async (t) => {
+    await UserStock.decrement(
+      { availableQuantity: investmentValue },
+      { where: { userId, stockCode: stock }, transaction: t },
+    );
+
+    await Stocks.increment(
+      { volume: investmentValue },
+      { where: { stock }, transaction: t },
+    );
+
+    const stockObj = await Stocks.findOne({ where: { stock }, transaction: t });
+    await Wallet.increment({ balance: stockObj!.value }, { where: { userId }, transaction: t });
+
+    return {
+      stockSold: stock,
+      quantity: investmentValue,
+      value: Number((stockObj!.value * investmentValue).toFixed(2)),
+    };
   });
 };
 
 export {
   buyAssets,
+  sellAssets,
 };
