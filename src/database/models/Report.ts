@@ -20,10 +20,6 @@ Report.init({
     allowNull: false,
     primaryKey: true,
   },
-  date: {
-    type: DATE,
-    allowNull: false,
-  },
   quantity: {
     type: INTEGER,
     allowNull: false,
@@ -41,9 +37,10 @@ Report.init({
   underscored: true,
   tableName: 'Reports',
   timestamps: false,
+  createdAt: 'date',
 });
 
 Transaction.hasOne(Report, { foreignKey: 'transactionId' });
-Report.belongsTo(Transaction, { foreignKey: 'transactionId' /* as: 'user' */ });
+Report.belongsTo(Transaction, { foreignKey: 'transactionId' });
 
 export { Report };
