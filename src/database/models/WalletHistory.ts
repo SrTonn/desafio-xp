@@ -30,7 +30,7 @@ WalletHistory.init({
     allowNull: false,
   },
   type: {
-    type: ENUM('deposit', 'withdraw'),
+    type: ENUM('deposit', 'withdraw', 'buyStock', 'sellStock'),
     allowNull: false,
   },
   createdAt: {

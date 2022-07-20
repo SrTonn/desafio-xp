@@ -6,6 +6,10 @@ module.exports = {
         primaryKey: true,
         autoIncrement: true,
         allowNull: false,
+        reference: {
+          model: 'User',
+          key: 'id',
+        },
       },
       user_id: {
         type: Sequelize.INTEGER,
@@ -16,7 +20,7 @@ module.exports = {
         allowNull: false,
       },
       type: {
-        type: Sequelize.ENUM('deposit', 'withdraw'),
+        type: Sequelize.ENUM('deposit', 'withdraw', 'buyAssets', 'sellAssets'),
         allowNull: false,
       },
       created_at: {
