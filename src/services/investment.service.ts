@@ -1,10 +1,7 @@
-import { Report } from '../database/models/Report';
 import { Stocks } from '../database/models/Stocks';
-import { Transaction } from '../database/models/Transaction';
 import { Wallet } from '../database/models/Wallet';
 import HttpException from '../shared/http.exception';
 import { investmentCalculator } from '../utils/calculator';
-
 import sequelize from '../database/models';
 import { UserStock } from '../database/models/UserStock';
 import { walletManagement } from '../utils/managementWallet';
@@ -49,18 +46,11 @@ const sellAssets = async (
   if (quantity! < investmentValue) throw new HttpException(406, 'Insufficient Assets');
 
   return sequelize.transaction(async (t) => {
-    await UserStock.decrement(
-      { availableQuantity: investmentValue },
-      { where: { userId, stockCode: stock }, transaction: t },
-    );
-
-    await Stocks.increment(
-      { volume: investmentValue },
-      { where: { stock }, transaction: t },
-    );
-
     const stockObj = await Stocks.findOne({ where: { stock }, transaction: t });
-    await Wallet.increment({ balance: stockObj!.value }, { where: { userId }, transaction: t });
+
+    const investment = Number((stockObj!.value * investmentValue).toFixed(2));
+    await walletManagement(userId, investment, 4, t);
+    await userStockManagement(userId, -investmentValue, stock, t);
 
     return {
       stockSold: stock,
