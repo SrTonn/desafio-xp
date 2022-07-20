@@ -11,6 +11,7 @@ module.exports = {
         },
       },
       stock_code: {
+        primaryKey: true,
         type: Sequelize.STRING,
         allowNull: false,
       },

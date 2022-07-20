@@ -6,7 +6,7 @@ class UserStock extends Model {
 
   stockCode!: string;
 
-  quantity!: number;
+  availableQuantity!: number;
 }
 
 UserStock.init({
@@ -17,9 +17,10 @@ UserStock.init({
   },
   stockCode: {
     type: STRING,
+    primaryKey: true,
     allowNull: false,
   },
-  quantity: {
+  availableQuantity: {
     type: INTEGER,
     allowNull: false,
   },
@@ -27,6 +28,7 @@ UserStock.init({
   sequelize: db,
   underscored: true,
   tableName: 'UserStocks',
+  timestamps: false,
 });
 
 export { UserStock };
