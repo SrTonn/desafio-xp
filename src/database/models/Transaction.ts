@@ -5,6 +5,8 @@ import { User } from './User';
 class Transaction extends Model {
   id!: number;
 
+  date!: Date;
+
   userId!: number;
 
   stockCode!: string;
@@ -15,6 +17,7 @@ Transaction.init({
     type: INTEGER,
     allowNull: false,
     primaryKey: true,
+    autoIncrement: true,
   },
   userId: {
     type: INTEGER,
@@ -29,7 +32,9 @@ Transaction.init({
   underscored: true,
   tableName: 'Transactions',
   timestamps: false,
-
+  defaultScope: {
+    raw: true,
+  },
 });
 
 User.hasOne(Transaction, { foreignKey: 'userId' });
