@@ -21,12 +21,21 @@ const buyAssets = async (
   }
 
   const investment = investmentCalculator(stockData.value, investmentValue);
+  if (stockData.volume < investment.stockBought) {
+    throw new HttpException(406, 'Quantity Requested Unavailable');
+  }
+
   if (investment.error) throw new HttpException(406, investment.error);
 
   return sequelize.transaction(async (t) => {
     await Wallet.decrement(
       { balance: investment.investedAmount },
       { where: { userId }, transaction: t },
+    );
+
+    await Stocks.decrement(
+      { volume: investment.stockBought },
+      { where: { stock }, transaction: t },
     );
 
     const [response]: any = await UserStock.increment(
