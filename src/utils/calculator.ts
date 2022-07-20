@@ -2,6 +2,7 @@ interface IInvestmentCalculator {
   stockBought: number;
   investedAmount: number;
   change: number;
+  error?: string;
 }
 
 const investmentCalculator = <T = number>(stockPrice: T, investmentValue: T) => {
@@ -15,6 +16,9 @@ const investmentCalculator = <T = number>(stockPrice: T, investmentValue: T) => 
 
   const rest = investmentInteger - result.investedAmount;
   result.change = Number((rest + (Number(investmentValue) - investmentInteger)).toFixed(2));
+
+  if (!result.stockBought) result.error = 'Insufficient Investment';
+
   return result;
 };
 
