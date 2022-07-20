@@ -4,6 +4,7 @@ import userLoginValidation from './userLoginValidation';
 import newUserValidation from './newUserValidation';
 import updateUserValidation from './updateUserValidation';
 import walletValidation from './walletValidation';
+import investmentValidation from './investmentValidation';
 
 export {
   error,
@@ -12,4 +13,5 @@ export {
   updateUserValidation,
   newUserValidation,
   walletValidation,
+  investmentValidation,
 };
