@@ -1,6 +1,7 @@
 import { Wallet } from '../database/models/Wallet';
 import { WalletHistory } from '../database/models/WalletHistory';
 import HttpException from '../shared/http.exception';
+import sequelize from '../database/models';
 
 const getBalance = async (userId: number) => {
   const balance = await Wallet.findOne({
@@ -13,20 +14,23 @@ const getBalance = async (userId: number) => {
 };
 
 const deposit = async (userId: number, { value: depositValue }: { value: number }) => {
-  try {
+  const result = sequelize.transaction(async (t) => {
     await Wallet.increment({ balance: depositValue }, { where: { userId } });
+    await WalletHistory.create({ userId, value: depositValue, type: 1 }, { transaction: t });
     return { success: true };
-  } catch (error) {
-    throw new HttpException(500, 'Internal Server Error');
-  }
+  });
+  return result;
 };
 
 const withdraw = async (userId: number, { value: withdrawValue }: { value: number }) => {
   const wallet = await Wallet.findByPk(userId);
   if (wallet!.balance < withdrawValue) throw new HttpException(406, 'Insufficient Balance');
+  return sequelize.transaction(async (t) => {
+    await Wallet.decrement({ balance: withdrawValue }, { where: { userId }, transaction: t });
 
-  await Wallet.decrement({ balance: withdrawValue }, { where: { userId } });
-  return { success: true };
+    await WalletHistory.create({ userId, value: withdrawValue, type: 2 }, { transaction: t });
+    return { success: true };
+  });
 };
 
 const history = async (userId: number) => {
