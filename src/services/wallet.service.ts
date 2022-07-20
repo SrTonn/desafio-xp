@@ -2,11 +2,12 @@ import { Wallet } from '../database/models/Wallet';
 import { WalletHistory } from '../database/models/WalletHistory';
 import HttpException from '../shared/http.exception';
 import sequelize from '../database/models';
+import { UserStock } from '../database/models/UserStock';
 
 const getBalance = async (userId: number) => {
   const balance = await Wallet.findOne({
-    raw: true,
     attributes: { exclude: ['userId'] },
+    include: { model: UserStock, as: 'stocks', attributes: { exclude: ['userId'] } },
     where: { userId },
   });
 
