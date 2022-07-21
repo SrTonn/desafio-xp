@@ -4,21 +4,44 @@ import HttpException from '../shared/http.exception';
 import sequelize from '../database/models';
 import { UserStock } from '../database/models/UserStock';
 import { walletManagement } from '../utils/managementWallet';
+import { IHistory } from '../interfaces';
 
 const getBalance = async (userId: number) => {
   const wallet = await Wallet.findOne({
     attributes: { exclude: ['userId'] },
     where: { userId },
   });
+
   const userStocks = await UserStock
     .findAll({ raw: true, where: { userId }, attributes: { exclude: ['userId'] } });
+
   const investmentAmount = userStocks.reduce((acc, { investedAmount }) => acc + investedAmount, 0);
   const stocks = userStocks
     .map((obj) => ({ ...obj, investedAmount: obj.investedAmount }));
+
+  const history = await WalletHistory.findAll({
+    raw: true,
+    where: { userId },
+    group: ['type'],
+    attributes: [
+      'type',
+      [sequelize.fn('sum', sequelize.col('value')), 'totalAmount'],
+    ],
+  });
+
+  const historyObj: IHistory = history
+    .reduce((acc, { type, totalAmount }: any) => ({ ...acc, [type]: totalAmount }), {});
+
   return {
     balance: wallet?.balance,
-    totalInvestedAmount: investmentAmount,
-    stocks,
+    currentAssets: Number(investmentAmount.toFixed(2)),
+    details: {
+      totalDeposit: historyObj.deposit,
+      totalWithdraw: historyObj.withdraw,
+      totalAssetsBought: historyObj.buyAssets,
+      totalAssetsSold: historyObj.sellAssets,
+    },
+    activeStocks: stocks,
   };
 };
 
