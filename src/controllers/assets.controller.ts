@@ -1,9 +1,15 @@
 import { Request, Response, Router } from 'express';
 import { authValidation } from '../middlewares';
 
-import { getAssets } from '../services/assets.service';
+import { getAssets, updateAssets } from '../services/assets.service';
 
 const assetsRouter = Router();
+
+assetsRouter
+  .get('/update', authValidation, async (req: Request, res: Response) => {
+    await updateAssets();
+    return res.sendStatus(200);
+  });
 
 assetsRouter
   .get('/', authValidation, async (_req: Request, res: Response) => {
