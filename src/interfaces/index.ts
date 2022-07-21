@@ -12,3 +12,10 @@ export interface IInvestment {
   change: number;
   error?: string;
 }
+
+export interface IHistory {
+  deposit?: number;
+  withdraw?: number;
+  buyAssets?: number;
+  sellAssets?: number;
+}
