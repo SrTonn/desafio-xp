@@ -6,13 +6,20 @@ import { UserStock } from '../database/models/UserStock';
 import { walletManagement } from '../utils/managementWallet';
 
 const getBalance = async (userId: number) => {
-  const balance = await Wallet.findOne({
+  const wallet = await Wallet.findOne({
     attributes: { exclude: ['userId'] },
-    include: { model: UserStock, as: 'stocks', attributes: { exclude: ['userId'] } },
     where: { userId },
   });
-
-  return balance;
+  const userStocks = await UserStock
+    .findAll({ raw: true, where: { userId }, attributes: { exclude: ['userId'] } });
+  const investmentAmount = userStocks.reduce((acc, { investedAmount }) => acc + +investedAmount, 0);
+  const stocks = userStocks
+    .map((obj) => ({ ...obj, investedAmount: Number(obj.investedAmount) }));
+  return {
+    balance: Number(wallet?.balance),
+    totalInvestedAmount: investmentAmount,
+    stocks,
+  };
 };
 
 const deposit = async (userId: number, { value: depositValue }: { value: number }) => {
