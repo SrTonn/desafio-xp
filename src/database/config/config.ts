@@ -8,6 +8,7 @@ const config: Options = {
   host: process.env.MYSQL_HOST,
   port: Number(process.env.MYSQL_PORT),
   dialect: 'mysql',
+  dialectOptions: { decimalNumbers: true },
 };
 
 export = config;
