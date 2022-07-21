@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+  node:
+    image: node:16
+    tty: true
+    stdin_open: true
+    command: bash
+    restart: always
+    working_dir: /app
+    volumes:
+      - ./:/app
+    container_name: app-investimentos
+    depends_on:
+      - db
+    ports:
+      - ${PORT}:${PORT}
+    environment:
+      MYSQL_USER: "${MYSQL_USERNAME}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
+      MYSQL_HOST: "${MYSQL_HOST}"
+      JWT_SECRET: "${JWT_SECRET}"
+
+  db:
+    container_name: app-investimentos-db
+    image: mysql:8.0.21
+    restart: always
+    ports:
+      - 3307:3306
+      - 33060:33060
+    environment:
+      TZ: "America/Sao_Paulo"
+      MYSQL_ROOT_PASSWORD: "${MYSQL_PASSWORD}"
+networks:
+  default:
+    name: app-investimentos-net
