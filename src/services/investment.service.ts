@@ -44,7 +44,7 @@ const sellAssets = async (
   if (!userStock) throw new HttpException(404, 'Asset Not Found');
 
   const quantity = userStock.availableQuantity;
-  if (quantity! < investmentValue) throw new HttpException(406, 'Insufficient Assets');
+  if (quantity < investmentValue) throw new HttpException(406, 'Insufficient Assets');
 
   return sequelize.transaction(async (t) => {
     const stockObj = await Stocks.findOne({ where: { stock }, transaction: t });
