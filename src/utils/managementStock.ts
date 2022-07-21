@@ -27,4 +27,14 @@ export const userStockManagement = async (
     { volume: investmentQuantity },
     { where: { stock }, transaction: t },
   );
+
+  const userStock = await UserStock.findOne({
+    where: { userId, stockCode: stock },
+    raw: true,
+    transaction: t,
+  });
+
+  if (userStock?.availableQuantity === 0) {
+    UserStock.destroy({ where: { userId, stockCode: stock }, transaction: t });
+  }
 };
