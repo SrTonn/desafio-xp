@@ -12,11 +12,11 @@ const getBalance = async (userId: number) => {
   });
   const userStocks = await UserStock
     .findAll({ raw: true, where: { userId }, attributes: { exclude: ['userId'] } });
-  const investmentAmount = userStocks.reduce((acc, { investedAmount }) => acc + +investedAmount, 0);
+  const investmentAmount = userStocks.reduce((acc, { investedAmount }) => acc + investedAmount, 0);
   const stocks = userStocks
-    .map((obj) => ({ ...obj, investedAmount: Number(obj.investedAmount) }));
+    .map((obj) => ({ ...obj, investedAmount: obj.investedAmount }));
   return {
-    balance: Number(wallet?.balance),
+    balance: wallet?.balance,
     totalInvestedAmount: investmentAmount,
     stocks,
   };
