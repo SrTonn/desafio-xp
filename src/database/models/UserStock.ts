@@ -7,6 +7,8 @@ class UserStock extends Model {
   stockCode!: string;
 
   availableQuantity!: number;
+
+  investedAmount!: number;
 }
 
 UserStock.init({
