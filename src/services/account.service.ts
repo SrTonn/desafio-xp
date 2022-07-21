@@ -3,6 +3,9 @@ import { generateJWTToken } from '../utils/JWTToken';
 import { User } from '../database/models/User';
 import { IUser } from '../interfaces';
 import { Wallet } from '../database/models/Wallet';
+import { WalletHistory } from '../database/models/WalletHistory';
+import { UserStock } from '../database/models/UserStock';
+import { Transaction } from '../database/models/Transaction';
 
 const authentication = async ({ email, password }: Omit<IUser, 'firstName' | 'lastName'>) => {
   const user = await User.findOne({
@@ -61,8 +64,20 @@ const updateUser = async (
 
 const removeUser = async (userId: number) => {
   await getUser(userId);
+  const wallet = await Wallet.findByPk(userId);
+  const userStock = await UserStock.findOne({ where: { userId } });
+  const conditions = [
+    wallet!.balance > 0,
+    userStock!.availableQuantity > 0,
+  ];
+
+  if (conditions.includes(true)) throw new HttpException(406, 'Account with available balance');
+
+  await Transaction.destroy({ where: { userId } });
   await User.destroy({ where: { id: userId } });
+  await UserStock.destroy({ where: { userId } });
   await Wallet.destroy({ where: { userId } });
+  await WalletHistory.destroy({ where: { userId } });
 };
 
 export {
