@@ -4,12 +4,13 @@ import { UserStock } from '../database/models/UserStock';
 
 export const userStockManagement = async (
   userId: number,
-  investment: number,
+  investmentQuantity: number,
   stock: string,
+  investedAmount: number,
   t?: Transaction,
 ) => {
   const [response]: any = await UserStock.increment(
-    { availableQuantity: investment },
+    { availableQuantity: investmentQuantity, investedAmount },
     { where: { userId, stockCode: stock }, transaction: t },
   );
 
@@ -17,12 +18,13 @@ export const userStockManagement = async (
     await UserStock.create({
       userId,
       stockCode: stock,
-      availableQuantity: investment,
+      availableQuantity: investmentQuantity,
+      investedAmount,
     }, { transaction: t });
   }
 
   await Stocks.decrement(
-    { volume: investment },
+    { volume: investmentQuantity },
     { where: { stock }, transaction: t },
   );
 };

@@ -21,15 +21,16 @@ const buyAssets = async (
   }
 
   const investment = investmentCalculator(stockData.value, investmentValue);
-  if (stockData.volume < investment.stockBought) {
+  const { investedAmount, stockBought } = investment;
+  if (stockData.volume < stockBought) {
     throw new HttpException(406, 'Quantity Requested Unavailable');
   }
 
   if (investment.error) throw new HttpException(406, investment.error);
   await sequelize.transaction(async (t) => {
-    await walletManagement(userId, -investment.investedAmount, 3, t);
-    await userStockManagement(userId, investment.stockBought, stock, t);
-    await transactionRegistry(userId, investment, stock, t);
+    await walletManagement(userId, -investedAmount, 3, t);
+    await userStockManagement(userId, stockBought, stock, investedAmount, t);
+    await transactionRegistry(userId, stockBought, investedAmount, stock, 1, t);
   });
 
   return investment;
@@ -50,12 +51,13 @@ const sellAssets = async (
 
     const investment = Number((stockObj!.value * investmentValue).toFixed(2));
     await walletManagement(userId, investment, 4, t);
-    await userStockManagement(userId, -investmentValue, stock, t);
+    await userStockManagement(userId, -investmentValue, stock, -investment, t);
+    await transactionRegistry(userId, investmentValue, investment, stock, 2, t);
 
     return {
       stockSold: stock,
       quantity: investmentValue,
-      value: Number((stockObj!.value * investmentValue).toFixed(2)),
+      value: investment,
     };
   });
 };
