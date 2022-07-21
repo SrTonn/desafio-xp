@@ -1,4 +1,4 @@
-import { DATE, DECIMAL, ENUM, INTEGER, Model } from 'sequelize';
+import { DECIMAL, ENUM, INTEGER, Model } from 'sequelize';
 import db from '.';
 import { Transaction } from './Transaction';
 
