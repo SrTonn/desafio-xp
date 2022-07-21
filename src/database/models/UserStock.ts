@@ -1,4 +1,4 @@
-import { INTEGER, Model, STRING } from 'sequelize';
+import { DECIMAL, INTEGER, Model, STRING } from 'sequelize';
 import db from '.';
 
 class UserStock extends Model {
@@ -22,6 +22,10 @@ UserStock.init({
   },
   availableQuantity: {
     type: INTEGER,
+    allowNull: false,
+  },
+  investedAmount: {
+    type: DECIMAL,
     allowNull: false,
   },
 }, {
