@@ -1,7 +1,7 @@
 import HttpException from '../shared/http.exception';
 import { generateJWTToken } from '../utils/JWTToken';
 import { User } from '../database/models/User';
-import { IUser } from '../interfaces';
+import { IUser, IUserUpdate } from '../interfaces';
 import { Wallet } from '../database/models/Wallet';
 import { WalletHistory } from '../database/models/WalletHistory';
 import { UserStock } from '../database/models/UserStock';
@@ -47,7 +47,7 @@ const getUser = async (userId: number, excludeAttr: string[] = []) => {
 
 const updateUser = async (
   userId: number,
-  { nickName, email, password }: Omit<IUser, 'firstName' | 'lastName'>,
+  { nickName, email, password }: IUserUpdate,
 ) => {
   const user = await getUser(userId, ['id', 'createdAt', 'updatedAt']);
   await User.update(
