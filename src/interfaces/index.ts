@@ -6,6 +6,12 @@ export interface IUser {
   lastName: string;
 }
 
+export interface IUserUpdate {
+  nickName?: string;
+  email?: string;
+  password?: string;
+}
+
 export interface IInvestment {
   stockBought: number;
   investedAmount: number;
