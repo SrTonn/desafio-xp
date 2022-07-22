@@ -1,6 +1,6 @@
 import { INTEGER, Model, STRING } from 'sequelize';
 import db from '.';
-import { User } from './User';
+import { Report } from './Report';
 
 class Transaction extends Model {
   id!: number;
@@ -37,7 +37,7 @@ Transaction.init({
   },
 });
 
-User.hasOne(Transaction, { foreignKey: 'userId' });
-Transaction.belongsTo(User, { foreignKey: 'userId', as: 'user' });
+Transaction.hasOne(Report, { foreignKey: 'transactionId' });
+Report.belongsTo(Transaction, { foreignKey: 'transactionId' });
 
 export { Transaction };

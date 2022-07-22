@@ -1,6 +1,5 @@
 import { DECIMAL, INTEGER, Model } from 'sequelize';
 import db from '.';
-import { User } from './User';
 import { UserStock } from './UserStock';
 
 class Wallet extends Model {
@@ -25,9 +24,6 @@ Wallet.init({
   underscored: true,
   tableName: 'Wallets',
 });
-
-User.hasOne(Wallet, { foreignKey: 'userId' });
-Wallet.belongsTo(User, { foreignKey: 'userId', as: 'user' });
 
 Wallet.hasMany(UserStock, { foreignKey: 'userId', as: 'stocks' });
 UserStock.belongsTo(Wallet, { foreignKey: 'userId' });

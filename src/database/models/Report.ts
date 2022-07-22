@@ -1,6 +1,5 @@
 import { DECIMAL, ENUM, INTEGER, Model } from 'sequelize';
 import db from '.';
-import { Transaction } from './Transaction';
 
 class Report extends Model {
   transactionId!: number;
@@ -39,8 +38,5 @@ Report.init({
   timestamps: false,
   createdAt: 'date',
 });
-
-Transaction.hasOne(Report, { foreignKey: 'transactionId' });
-Report.belongsTo(Transaction, { foreignKey: 'transactionId' });
 
 export { Report };
