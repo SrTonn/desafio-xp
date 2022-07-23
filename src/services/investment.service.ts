@@ -38,25 +38,25 @@ const buyAssets = async (
 
 const sellAssets = async (
   userId: number,
-  { stock, value: investmentValue }: { stock: string, value: number },
+  { stock, quantity: soldQuantity }: { stock: string, quantity: number },
 ) => {
   const userStock = await UserStock.findOne({ where: { userId, stockCode: stock }, raw: true });
   if (!userStock) throw new HttpException(404, 'Asset Not Found');
 
   const quantity = userStock.availableQuantity;
-  if (quantity < investmentValue) throw new HttpException(406, 'Insufficient Assets');
+  if (quantity < soldQuantity) throw new HttpException(406, 'Insufficient Assets');
 
   return sequelize.transaction(async (t) => {
     const stockObj = await Stocks.findOne({ where: { stock }, transaction: t });
 
-    const investment = Number((stockObj!.value * investmentValue).toFixed(2));
+    const investment = Number((stockObj!.value * soldQuantity).toFixed(2));
     await walletManagement(userId, investment, 4, t);
-    await userStockManagement(userId, -investmentValue, stock, -investment, t);
-    await transactionRegistry(userId, investmentValue, investment, stock, 2, t);
+    await userStockManagement(userId, -soldQuantity, stock, -investment, t);
+    await transactionRegistry(userId, soldQuantity, investment, stock, 2, t);
 
     return {
       stockSold: stock,
-      quantity: investmentValue,
+      quantity: soldQuantity,
       value: investment,
     };
   });
