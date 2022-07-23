@@ -36,10 +36,10 @@ const getBalance = async (userId: number) => {
     balance: wallet?.balance,
     currentAssets: Number(investmentAmount.toFixed(2)),
     details: {
-      totalDeposit: historyObj.deposit,
-      totalWithdraw: historyObj.withdraw,
-      totalAssetsBought: historyObj.buyAssets,
-      totalAssetsSold: historyObj.sellAssets,
+      totalDeposit: historyObj.deposit || null,
+      totalWithdraw: historyObj.withdraw || null,
+      totalAssetsBought: historyObj.buyAssets || null,
+      totalAssetsSold: historyObj.sellAssets || null,
     },
     activeStocks: stocks,
   };
