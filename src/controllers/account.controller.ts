@@ -6,7 +6,13 @@ import {
   updateUserValidation,
 } from '../middlewares';
 
-import { authentication, createUser, updateUser, removeUser } from '../services/account.service';
+import {
+  authentication,
+  createUser,
+  updateUser,
+  removeUser,
+  getUser,
+} from '../services/account.service';
 
 const accountRouter = Router();
 
@@ -27,10 +33,17 @@ accountRouter
     return res.status(200).json(response);
   });
 
-accountRouter.delete('/remove/me', authValidation, async (req: Request, res: Response) => {
+accountRouter.delete('/remove/me', authValidation, async (_req: Request, res: Response) => {
   const { id } = res.locals.payload;
   await removeUser(id);
+  res.locals.payload = null;
   return res.sendStatus(204);
+});
+
+accountRouter.get('/me', authValidation, async (_req: Request, res: Response) => {
+  const { id } = res.locals.payload;
+  const response = await getUser(id);
+  return res.status(200).json(response);
 });
 
 export default accountRouter;

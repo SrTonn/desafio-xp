@@ -36,7 +36,7 @@ const createUser = async ({ nickName, firstName, lastName, email, password }: IU
   return { token };
 };
 
-const getUser = async (userId: number, excludeAttr: string[] = []) => {
+const getUser = async (userId: number, excludeAttr: string[] = ['id']) => {
   const user = await User.findByPk(
     userId,
     { raw: true, attributes: { exclude: excludeAttr } },
@@ -49,7 +49,7 @@ const updateUser = async (
   userId: number,
   { nickName, email, password }: IUserUpdate,
 ) => {
-  const user = await getUser(userId, ['id', 'createdAt', 'updatedAt']);
+  const user = await getUser(userId, ['createdAt', 'updatedAt']);
   await User.update(
     { nickName, email, password },
     { where: { id: userId } },
@@ -68,7 +68,7 @@ const removeUser = async (userId: number) => {
   const userStock = await UserStock.findOne({ where: { userId } });
   const conditions = [
     wallet!.balance > 0,
-    userStock!.availableQuantity > 0,
+    userStock ? userStock.availableQuantity > 0 : false,
   ];
 
   if (conditions.includes(true)) throw new HttpException(406, 'Account with available balance');
@@ -85,4 +85,5 @@ export {
   createUser,
   updateUser,
   removeUser,
+  getUser,
 };
