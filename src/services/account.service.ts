@@ -36,10 +36,14 @@ const createUser = async ({ nickName, firstName, lastName, email, password }: IU
   return { token };
 };
 
-const getUser = async (userId: number, excludeAttr: string[] = ['id']) => {
+const getUser = async (
+  userId: number,
+  excludeAttr: string[] = ['id'],
+  logging: boolean = true,
+) => {
   const user = await User.findByPk(
     userId,
-    { raw: true, attributes: { exclude: excludeAttr } },
+    { raw: true, attributes: { exclude: excludeAttr }, logging },
   );
   if (!user) throw new HttpException(404, 'User does not exist');
   return user;

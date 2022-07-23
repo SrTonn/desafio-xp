@@ -12,7 +12,7 @@ const authenticationMiddleware = async (req: Request, res: Response, next: NextF
 
   const payload: any = await authenticateToken(token);
 
-  await getUser(payload.id);
+  await getUser(payload.id, [], false);
 
   res.locals.payload = payload;
 
