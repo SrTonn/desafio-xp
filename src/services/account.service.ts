@@ -36,7 +36,7 @@ const createUser = async ({ nickName, firstName, lastName, email, password }: IU
   return { token };
 };
 
-const getUser = async (userId: number, excludeAttr: string[] = []) => {
+const getUser = async (userId: number, excludeAttr: string[] = ['id']) => {
   const user = await User.findByPk(
     userId,
     { raw: true, attributes: { exclude: excludeAttr } },
@@ -49,7 +49,7 @@ const updateUser = async (
   userId: number,
   { nickName, email, password }: IUserUpdate,
 ) => {
-  const user = await getUser(userId, ['id', 'createdAt', 'updatedAt']);
+  const user = await getUser(userId, ['createdAt', 'updatedAt']);
   await User.update(
     { nickName, email, password },
     { where: { id: userId } },
