@@ -1,6 +1,7 @@
 export default {
   preset: 'ts-jest',
-  rootDir: './tests',
+  coverageDirectory: 'coverage',
+  testEnvironment: 'node',
   testRegex: './*\\.test\\.ts$',
   testTimeout: 180000,
   maxWorkers: 1,
