@@ -33,9 +33,10 @@ accountRouter
     return res.status(200).json(response);
   });
 
-accountRouter.delete('/remove/me', authValidation, async (req: Request, res: Response) => {
+accountRouter.delete('/remove/me', authValidation, async (_req: Request, res: Response) => {
   const { id } = res.locals.payload;
   await removeUser(id);
+  res.locals.payload = null;
   return res.sendStatus(204);
 });
 
