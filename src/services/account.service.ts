@@ -68,7 +68,7 @@ const removeUser = async (userId: number) => {
   const userStock = await UserStock.findOne({ where: { userId } });
   const conditions = [
     wallet!.balance > 0,
-    userStock!.availableQuantity > 0,
+    userStock ? userStock.availableQuantity > 0 : false,
   ];
 
   if (conditions.includes(true)) throw new HttpException(406, 'Account with available balance');
