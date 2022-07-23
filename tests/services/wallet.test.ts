@@ -2,6 +2,7 @@ import { deposit, getBalance, withdraw, history } from '../../src/services/walle
 import { Wallet } from '../../src/database/models/Wallet';
 import { UserStock } from '../../src/database/models/UserStock';
 import { WalletHistory } from '../../src/database/models/WalletHistory';
+import sequelize from '../../src/database/models';
 
 describe('Test wallet service', () => {
   const fakeId = 4;
@@ -62,6 +63,7 @@ describe('Test wallet service', () => {
 
     jest.spyOn(Wallet, 'increment').mockResolvedValue(mockWalletIncrement as never);
     jest.spyOn(WalletHistory, 'create').mockResolvedValue(mockWalletHistory as never);
+    jest.spyOn(sequelize, 'transaction').mockResolvedValue(expectedSuccessResponse as never);
 
     const response = await deposit(fakeId, { value: 5000 });
     expect(response).toEqual(expectedSuccessResponse);

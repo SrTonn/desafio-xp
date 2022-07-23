@@ -3,6 +3,7 @@ import { UserStock } from '../../src/database/models/UserStock';
 import { Wallet } from '../../src/database/models/Wallet';
 import { buyAssets, sellAssets } from '../../src/services/investment.service'
 import HttpException from '../../src/shared/http.exception';
+import sequelize from '../../src/database/models';
 
 describe('Test investment service', () => {
   const fakeId = 5;
@@ -70,6 +71,7 @@ describe('Test investment service', () => {
 
     jest.spyOn(Wallet, 'findByPk').mockResolvedValue(mockWalletResponse as Wallet);
     jest.spyOn(Stocks, 'findOne').mockResolvedValue(mockStocksResponse as never);
+    jest.spyOn(sequelize, 'transaction').mockResolvedValue(expectedResponse as never);
 
     const response = await buyAssets(fakeId, body);
     expect(response).toEqual(expectedResponse);
@@ -101,6 +103,7 @@ describe('Test investment service', () => {
     };
 
     jest.spyOn(UserStock, 'findOne').mockResolvedValue(mockUserStock as UserStock);
+    jest.spyOn(sequelize, 'transaction').mockResolvedValue(expectedResponse as never);
 
     const response = await sellAssets(fakeId, body);
     expect(response).toEqual(expectedResponse);
