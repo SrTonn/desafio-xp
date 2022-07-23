@@ -1,8 +1,16 @@
 import Joi from 'joi';
 
-const schemaInvestment = Joi.object().keys({
+const schemaInvestmentBuy = Joi.object().keys({
   stock: Joi.string().min(4).max(6).required(),
   value: Joi.number().min(1).required(),
 });
 
-export { schemaInvestment };
+const schemaInvestmentSell = Joi.object().keys({
+  stock: Joi.string().min(4).max(6).required(),
+  quantity: Joi.number().min(1).integer().required(),
+});
+
+export {
+  schemaInvestmentBuy,
+  schemaInvestmentSell,
+};
