@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
+import { getUser } from '../services/account.service';
 import HttpException from '../shared/http.exception';
 import { authenticateToken } from '../utils/JWTToken';
 
@@ -9,7 +10,9 @@ const authenticationMiddleware = async (req: Request, res: Response, next: NextF
     throw new HttpException(401, 'Token not found');
   }
 
-  const payload = await authenticateToken(token);
+  const payload: any = await authenticateToken(token);
+
+  await getUser(payload.id);
 
   res.locals.payload = payload;
 
