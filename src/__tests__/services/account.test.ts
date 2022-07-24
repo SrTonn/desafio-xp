@@ -4,6 +4,7 @@ import { authentication, createUser, removeUser, updateUser } from '../../servic
 import { Wallet } from '../../database/models/Wallet';
 import { UserStock } from '../../database/models/UserStock';
 import HttpException from '../../shared/http.exception';
+import * as Mock from '../mocks';
 
 describe('Test account service', () => {
   const mockBodyNewAccount = {
@@ -15,40 +16,30 @@ describe('Test account service', () => {
 
   const fakeId = 4;
 
-  const mockUserFindOneORFindPK = {
-    nickName: 'little Ol',
-    firstName: 'Ollie',
-    lastName: 'Bryant',
-    email: 'ollie.bryant@gmail.com',
-  };
-
-  const mockUserResponse = {
-    id: fakeId,
-    nickName: undefined,
-    firstName: 'Stephen',
-    lastName: 'Curry',
-    email: 'stephen.curry@gmail.com',
-    password: 'Curry@Stephen',
-    updatedAt: '2022-07-22T13:27:01.183Z',
-    createdAt: '2022-07-22T13:27:01.183Z',
-    toJSON() {},
-  };
-
-  const mockWalletResponse = { balance: 0, userId: fakeId };
+  // const mockUserFindOneORFindPK = {
+  //   nickName: 'little Ol',
+  //   firstName: 'Ollie',
+  //   lastName: 'Bryant',
+  //   email: 'ollie.bryant@gmail.com',
+  // };
 
   const fakeToken = '@fakeToken123!#';
 
+  afterAll(() => {
+    jest.clearAllMocks();
+  });
+
   it('Será validado que é possível criar conta com sucesso', async () => {
-    jest.spyOn(User, 'create').mockResolvedValue(mockUserResponse);
-    jest.spyOn(Wallet, 'create').mockResolvedValue(mockWalletResponse);
-    jest.spyOn(JWT, 'generateJWTToken').mockReturnValue(fakeToken);
+    jest.spyOn(User, 'create').mockResolvedValue(Mock.userResponse);
+    jest.spyOn(Wallet, 'create').mockResolvedValue(Mock.walletResponse);
+    jest.spyOn(JWT, 'generateJWTToken').mockReturnValue(Mock.fakeToken);
 
     const response = await createUser(mockBodyNewAccount);
     expect(response.token).toEqual(fakeToken);
   });
 
   it('Será validado que é possível fazer login com sucesso', async () => {
-    jest.spyOn(User, 'findOne').mockResolvedValue(mockUserFindOneORFindPK as User);
+    jest.spyOn(User, 'findOne').mockResolvedValue(Mock.userFindOneORFindPK as User);
     jest.spyOn(JWT, 'generateJWTToken').mockReturnValue(fakeToken);
     const response = await authentication({ email: 'test@gmail.com', password: 'senha123' });
 
@@ -76,27 +67,23 @@ describe('Test account service', () => {
 
   it('Será validado que é possível fazer update do apelido do usuário', async () => {
     jest.spyOn(User, 'update').mockResolvedValue([1]);
-    jest.spyOn(User, 'findByPk').mockResolvedValue(mockUserFindOneORFindPK as User);
+    jest.spyOn(User, 'findByPk').mockResolvedValue(Mock.userFindOneORFindPK as User);
+
     const response = await updateUser(fakeId, { nickName: 'little Ol' });
 
-    expect(response).toEqual(mockUserFindOneORFindPK);
+    expect(response).toEqual(Mock.userFindOneORFindPK);
   });
 
-  it('Será validado não é possível remover um usuário com saldo acima de 0', async () => {
+  it('Será validado que não é possível remover um usuário com saldo acima de 0', async () => {
     const mockResponse = {
       nickName: 'little Ol',
       firstName: 'Ollie',
       lastName: 'Bryant',
       email: 'ollie.bryant@gmail.com',
     };
-    const mockUserStock = {
-      userId: fakeId,
-      stockCode: 'AGRO3',
-      availableQuantity: 1,
-      investedAmount: 23.24,
-    };
+
     jest.spyOn(User, 'findByPk').mockResolvedValue(mockResponse as User);
-    jest.spyOn(UserStock, 'findOne').mockResolvedValue(mockUserStock as UserStock);
+    jest.spyOn(UserStock, 'findOne').mockResolvedValue(Mock.userStock as UserStock);
     jest.spyOn(Wallet, 'findByPk')
       .mockResolvedValue({ userId: fakeId, balance: 9929.11 } as Wallet);
 
