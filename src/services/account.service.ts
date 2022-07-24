@@ -53,7 +53,7 @@ const updateUser = async (
   userId: number,
   { nickName, email, password }: IUserUpdate,
 ) => {
-  const user = await getUser(userId, ['createdAt', 'updatedAt']);
+  const user = await getUser(userId, ['id', 'createdAt', 'updatedAt']);
   await User.update(
     { nickName, email, password },
     { where: { id: userId } },
