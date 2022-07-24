@@ -4,33 +4,19 @@ import { Wallet } from '../../database/models/Wallet';
 import { buyAssets, sellAssets } from '../../services/investment.service';
 import HttpException from '../../shared/http.exception';
 import sequelize from '../../database/models';
+import * as Mock from '../mocks';
 
 describe('Test investment service', () => {
   const fakeId = 5;
   const stock = 'XPBR31';
-  const mockStocksResponse = {
-    stock: 'XPBR31',
-    name: 'XP INC DR1',
-    value: 98.86,
-    volume: 100,
-    logo: 'https://s3-symbol-logo.tradingview.com/xp--big.svg',
-  };
-
-  const mockUserStock = {
-    userId: fakeId,
-    stockCode: stock,
-    availableQuantity: 15,
-    investedAmount: 1482.9,
-  };
 
   it(
     'Será validado que não é possível comprar ações com saldo inferior ao valor da ação',
     async () => {
       const body = { stock, value: 115 };
-      const mockWalletResponse = { userId: fakeId, balance: 50 };
 
-      jest.spyOn(Wallet, 'findByPk').mockResolvedValue(mockWalletResponse as Wallet);
-      jest.spyOn(Stocks, 'findOne').mockResolvedValue(mockStocksResponse as never);
+      jest.spyOn(Wallet, 'findByPk').mockResolvedValue(Mock.walletFindByPk as Wallet);
+      jest.spyOn(Stocks, 'findOne').mockResolvedValue(Mock.stocksFindOne as Stocks);
 
       let response = {} as HttpException;
       try {
@@ -51,7 +37,7 @@ describe('Test investment service', () => {
       const mockWalletResponse = { userId: fakeId, balance: 50000 };
 
       jest.spyOn(Wallet, 'findByPk').mockResolvedValue(mockWalletResponse as Wallet);
-      jest.spyOn(Stocks, 'findOne').mockResolvedValue(mockStocksResponse as never);
+      jest.spyOn(Stocks, 'findOne').mockResolvedValue(Mock.stocksFindOne as Stocks);
 
       let response = {} as HttpException;
       try {
@@ -69,18 +55,12 @@ describe('Test investment service', () => {
     const body = { stock, value: 115 };
     const mockWalletResponse = { userId: fakeId, balance: 5000 };
 
-    const expectedResponse = {
-      stockBought: 1,
-      investedAmount: 98.86,
-      change: 16.14,
-    };
-
     jest.spyOn(Wallet, 'findByPk').mockResolvedValue(mockWalletResponse as Wallet);
-    jest.spyOn(Stocks, 'findOne').mockResolvedValue(mockStocksResponse as never);
-    jest.spyOn(sequelize, 'transaction').mockResolvedValue(expectedResponse as never);
+    jest.spyOn(Stocks, 'findOne').mockResolvedValue(Mock.stocksFindOne as Stocks);
+    jest.spyOn(sequelize, 'transaction').mockResolvedValue(Mock.investmentBuyResponse as never);
 
     const response = await buyAssets(fakeId, body);
-    expect(response).toEqual(expectedResponse);
+    expect(response).toEqual(Mock.investmentBuyResponse);
   });
 
   it(
@@ -88,7 +68,7 @@ describe('Test investment service', () => {
     async () => {
       const body = { stock, quantity: 50 };
 
-      jest.spyOn(UserStock, 'findOne').mockResolvedValue(mockUserStock as UserStock);
+      jest.spyOn(UserStock, 'findOne').mockResolvedValue(Mock.userStockFindOne as UserStock);
 
       let response = {} as HttpException;
       try {
@@ -105,16 +85,10 @@ describe('Test investment service', () => {
   it('Será validado que é possível vender ações com sucesso', async () => {
     const body = { stock, quantity: 15 };
 
-    const expectedResponse = {
-      stockSold: stock,
-      quantity: 15,
-      value: 1482.9,
-    };
-
-    jest.spyOn(UserStock, 'findOne').mockResolvedValue(mockUserStock as UserStock);
-    jest.spyOn(sequelize, 'transaction').mockResolvedValue(expectedResponse as never);
+    jest.spyOn(UserStock, 'findOne').mockResolvedValue(Mock.userStockFindOne as UserStock);
+    jest.spyOn(sequelize, 'transaction').mockResolvedValue(Mock.investmentSellResponse as never);
 
     const response = await sellAssets(fakeId, body);
-    expect(response).toEqual(expectedResponse);
+    expect(response).toEqual(Mock.investmentSellResponse);
   });
 });
