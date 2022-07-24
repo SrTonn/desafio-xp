@@ -39,3 +39,25 @@ export const userStock = {
   availableQuantity: 1,
   investedAmount: 23.24,
 };
+
+export const stockList = [{
+  stock: 'AGRO3',
+  name: 'BRASILAGRO',
+  value: 23.24,
+  volume: 53089,
+  logo: 'https://s3-symbol-logo.tradingview.com/brasilagro--big.svg',
+},
+{
+  stock: 'AMZO34',
+  name: 'AMAZON DRN',
+  value: 4.05,
+  volume: 231163,
+  logo: 'https://s3-symbol-logo.tradingview.com/amazon--big.svg',
+},
+{
+  stock: 'ASAI3',
+  name: 'ASSAI',
+  value: 15.53,
+  volume: 45609,
+  logo: 'https://s3-symbol-logo.tradingview.com/assai-on-nm--big.svg',
+}];
