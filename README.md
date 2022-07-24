@@ -1,4 +1,3 @@
-
 # Desafio Técnico BackEnd - Processo Seletivo XP Inc.
 
 Projeto desenvolvido durante o processo seletivo da [XP Inc](https://www.xpinc.com/)
@@ -102,7 +101,8 @@ Para rodar os testes com coverage, rode o seguinte comando
 ```bash
   yarn test-coverage
 ```
-
+### Cobertura dos testes:
+![coberturaDeTeste-desafioXP](https://user-images.githubusercontent.com/30580384/180670907-d11f9bdd-76a4-441b-867d-935e70ffc891.png)
 
 ## Documentação
 
