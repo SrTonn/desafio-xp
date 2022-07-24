@@ -54,7 +54,23 @@ describe('Test account service', () => {
 
     expect(response).toEqual({ token: fakeToken });
   });
-  
+
+  it('Será validado que não é possível fazer login com dados de uma conta inexistente', async () => {
+    jest.spyOn(User, 'findOne').mockResolvedValue(null as never);
+    jest.spyOn(JWT, 'generateJWTToken').mockReturnValue(fakeToken);
+
+    let response = {} as HttpException;
+
+    try {
+      await authentication({ email: 'usuario.inexistente@gmail.com', password: 'senha12345' });
+    } catch (error) {
+      response = error as HttpException;
+    }
+
+    expect(response.status).toBe(400);
+    expect(response.message).toBe('Invalid fields');
+  });
+
   it('Será validado que é possível fazer update do apelido do usuário', async () => {
 
     jest.spyOn(User, 'update').mockResolvedValue([1]);
