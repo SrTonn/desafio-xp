@@ -61,3 +61,71 @@ export const stockList = [{
   volume: 45609,
   logo: 'https://s3-symbol-logo.tradingview.com/assai-on-nm--big.svg',
 }];
+
+export const userStockFindAll = [
+  { stockCode: 'AMZO34', availableQuantity: 86, investedAmount: 348.3 },
+  { stockCode: 'XPBR31', availableQuantity: 7, investedAmount: 692.02 },
+];
+
+export const walletHistoryFindAllGroup = [
+  { type: 'deposit', totalAmount: 5000 },
+  { type: 'withdraw', totalAmount: 2000 },
+  { type: 'buyAssets', totalAmount: 1040.32 },
+  { type: 'sellAssets', totalAmount: 60.75 },
+];
+
+const [
+  { totalAmount: depositWalletHistory },
+  { totalAmount: withdrawWalletHistory },
+  { totalAmount: buyAssets },
+  { totalAmount: sellAssets },
+] = walletHistoryFindAllGroup;
+
+const balance = (depositWalletHistory + sellAssets) - withdrawWalletHistory - buyAssets;
+
+export const walletFindOne = { balance };
+
+export const getBalanceResponse = {
+  balance,
+  currentAssets: 1040.32,
+  details: {
+    totalDeposit: 5000,
+    totalWithdraw: 2000,
+    totalAssetsBought: 1040.32,
+    totalAssetsSold: 60.75,
+  },
+  activeStocks: userStockFindAll,
+};
+
+export const walletIncrementSuccess = [[undefined, 1]];
+export const walletHistoryCreate = {
+  id: 21,
+  userId: fakeId,
+  value: 5000,
+  type: 2,
+  createdAt: '2022-07-23T17:42:03.954Z',
+};
+
+export const successTrue = { success: true };
+
+export const walletHistoryFindAll = [
+  {
+    value: 5000,
+    type: 'deposit',
+    createdAt: '2022-07-23T17:05:35.000Z',
+  },
+  {
+    value: 2000,
+    type: 'withdraw',
+    createdAt: '2022-07-23T17:05:43.000Z',
+  },
+  {
+    value: 348.3,
+    type: 'buyAssets',
+    createdAt: '2022-07-23T17:06:00.000Z',
+  },
+  {
+    value: 692.02,
+    type: 'buyAssets',
+    createdAt: '2022-07-23T17:06:58.000Z',
+  }];
