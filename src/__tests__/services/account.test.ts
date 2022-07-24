@@ -16,13 +16,6 @@ describe('Test account service', () => {
 
   const fakeId = 4;
 
-  // const mockUserFindOneORFindPK = {
-  //   nickName: 'little Ol',
-  //   firstName: 'Ollie',
-  //   lastName: 'Bryant',
-  //   email: 'ollie.bryant@gmail.com',
-  // };
-
   const fakeToken = '@fakeToken123!#';
 
   afterAll(() => {
