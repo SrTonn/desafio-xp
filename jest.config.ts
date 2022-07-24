@@ -2,10 +2,10 @@ export default {
   preset: 'ts-jest',
   coverageDirectory: 'coverage',
   testEnvironment: 'node',
-  testRegex: './*\\.test\\.ts$',
+  testRegex: './*\\.(test|spec)\\.ts$',
   collectCoverageFrom: [
     "src/{!(database|joi|utils|middlewares|shared),}/*.ts"
   ],
-  testTimeout: 180000,
+  testTimeout: 18000,
   maxWorkers: 1,
 };
