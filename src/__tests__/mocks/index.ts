@@ -129,3 +129,33 @@ export const walletHistoryFindAll = [
     type: 'buyAssets',
     createdAt: '2022-07-23T17:06:58.000Z',
   }];
+
+export const investmentBuyResponse = {
+  stockBought: 1,
+  investedAmount: 98.86,
+  change: 16.14,
+};
+const stock = 'XPBR31';
+
+export const investmentSellResponse = {
+  stockSold: stock,
+  quantity: 15,
+  value: 1482.9,
+};
+
+export const userStockFindOne = {
+  userId: fakeId,
+  stockCode: stock,
+  availableQuantity: 15,
+  investedAmount: 1482.9,
+};
+
+export const walletFindByPk = { userId: fakeId, balance: 50 };
+
+export const stocksFindOne = {
+  stock: 'XPBR31',
+  name: 'XP INC DR1',
+  value: 98.86,
+  volume: 100,
+  logo: 'https://s3-symbol-logo.tradingview.com/xp--big.svg',
+};
