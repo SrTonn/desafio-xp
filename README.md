@@ -1,4 +1,5 @@
 # Desafio Técnico BackEnd - Processo Seletivo XP Inc.
+[![wakatime](https://wakatime.com/badge/user/464931db-2683-48c6-bcf0-ef92757cff6e/project/1547d615-4602-4318-9a71-b3a2a09d4bb5.svg)](https://wakatime.com/badge/user/464931db-2683-48c6-bcf0-ef92757cff6e/project/1547d615-4602-4318-9a71-b3a2a09d4bb5)
 
 Projeto desenvolvido durante o processo seletivo da [XP Inc](https://www.xpinc.com/)
 exclusivo para a turma XP em parceria com a [Trybe](https://www.betrybe.com/) na data de 24/07/22.
@@ -80,7 +81,10 @@ Instale as dependências
   ```bash
     docker exec -it app-investimentos bash
   ```
-  ⚠️caso necessário instale as dependencias novamente e inicie o servidor⚠️
+
+  ⚠️ o container node do docker está configurado na porta 3000, lembre-se disso na hora de fazer requisição ⚠️
+
+  ⚠️ caso necessário instale as dependencias novamente e inicie o servidor ⚠️
   ```bash
     yarn install
   ```
